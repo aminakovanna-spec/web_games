@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добрые игры 2.0 — 1000 и 1 идея</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Nunito & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#035485',
+                        },
+                        kindness: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        },
+                        warm: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Nunito', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        h1, h2, h3, h4, .font-display { font-family: 'Nunito', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .tab-btn.active { background-color: #0284c7; color: white; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 selection:bg-brand-100 selection:text-brand-700">
+
+    <!-- Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo & Brand Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('generator')">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-brand-500 via-teal-500 to-warm-500 rounded-2xl flex items-center justify-center text-white shadow-md transform hover:rotate-3 transition">
+                        <i class="fa-solid fa-heart-pulse text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl sm:text-2xl font-black font-display tracking-tight text-slate-800 block leading-none">
+                            ДОБРЫЕ ИГРЫ <span class="text-brand-500">2.0</span>
+                        </span>
+                        <span class="text-xs font-semibold text-slate-500 tracking-wider uppercase">1000 и 1 идея</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('generator')" id="nav-generator" class="nav-item tab-btn active px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Генератор промтов</span>
+                    </button>
+                    <button onclick="switchTab('templates')" id="nav-templates" class="nav-item text-slate-600 hover:bg-slate-100 px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Шаблоны</span>
+                    </button>
+                    <button onclick="switchTab('my-prompts')" id="nav-my-prompts" class="nav-item text-slate-600 hover:bg-slate-100 px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 relative">
+                        <i class="fa-solid fa-robot"></i>
+                        <span>Мои промты</span>
+                        <span id="saved-prompts-count" class="bg-brand-500 text-white text-xs px-2 py-0.5 rounded-full font-extrabold hidden">0</span>
+                    </button>
+                    <button onclick="switchTab('history')" id="nav-history" class="nav-item text-slate-600 hover:bg-slate-100 px-4 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>История</span>
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Toggle Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('generator'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm bg-brand-50 text-brand-600 flex items-center gap-3">
+                <i class="fa-solid fa-wand-magic-sparkles text-lg"></i> Генератор промтов
+            </button>
+            <button onclick="switchTab('templates'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3">
+                <i class="fa-solid fa-layer-group text-lg"></i> Шаблоны занятий
+            </button>
+            <button onclick="switchTab('my-prompts'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3">
+                <i class="fa-solid fa-robot text-lg"></i> Сохраненные промты
+            </button>
+            <button onclick="switchTab('history'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3">
+                <i class="fa-solid fa-clock-rotate-left text-lg"></i> История генераций
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Banner Subtitle Header -->
+        <div class="mb-8 text-center max-w-3xl mx-auto">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wider mb-3">
+                <i class="fa-solid fa-sparkles"></i> Помощник современного воспитателя
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 font-display tracking-tight leading-tight">
+                Готовый дидактический материал в один клик
+            </h1>
+            <p class="mt-2 text-slate-600 font-medium text-base sm:text-lg">
+                <span class="font-bold text-brand-600">Идея</span> → готовый промт → <span class="font-bold text-brand-600">нейросеть</span> → материал → <span class="font-bold text-brand-600">печать</span>
+            </p>
+            <p class="text-xs text-slate-500 mt-1">Воспитателю не нужно придумывать промт — приложение формирует профессиональную инструкцию за вас!</p>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: GENERATOR SECTION -->
+        <!-- ========================================== -->
+        <div id="tab-generator" class="tab-content space-y-8">
+            
+            <!-- STEP WIZARD FORM -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-500 via-teal-400 to-warm-500"></div>
+
+                <div id="alert-banner" class="hidden mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm font-semibold flex items-center gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-xl flex-shrink-0"></i>
+                    <span id="alert-message">Пожалуйста, заполните обязательные поля.</span>
+                </div>
+
+                <form id="generator-form" onsubmit="event.preventDefault(); handleGeneratePrompt();" class="space-y-8">
+                    
+                    <!-- STEP 1: AGE SELECTOR -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-500 text-white font-black text-sm flex items-center justify-center font-display">1</span>
+                            <h3 class="text-lg font-bold text-slate-800">Возраст детей <span class="text-rose-500">*</span></h3>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <label class="age-card cursor-pointer border-2 border-slate-200 rounded-2xl p-4 text-center hover:border-brand-500 transition duration-200 bg-slate-50 hover:bg-brand-50/30">
+                                <input type="radio" name="age" value="3-4 года" class="hidden" onchange="highlightSelection('age', this)">
+                                <div class="text-2xl mb-1">🐣</div>
+                                <div class="font-bold text-slate-800 text-sm">3–4 года</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Младшая группа</div>
+                            </label>
+                            <label class="age-card cursor-pointer border-2 border-slate-200 rounded-2xl p-4 text-center hover:border-brand-500 transition duration-200 bg-slate-50 hover:bg-brand-50/30">
+                                <input type="radio" name="age" value="4-5 лет" class="hidden" onchange="highlightSelection('age', this)">
+                                <div class="text-2xl mb-1">🐥</div>
+                                <div class="font-bold text-slate-800 text-sm">4–5 лет</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Средняя группа</div>
+                            </label>
+                            <label class="age-card cursor-pointer border-2 border-slate-200 rounded-2xl p-4 text-center hover:border-brand-500 transition duration-200 bg-slate-50 hover:bg-brand-50/30">
+                                <input type="radio" name="age" value="5-6 лет" class="hidden" checked onchange="highlightSelection('age', this)">
+                                <div class="text-2xl mb-1">🦊</div>
+                                <div class="font-bold text-slate-800 text-sm">5–6 лет</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Старшая группа</div>
+                            </label>
+                            <label class="age-card cursor-pointer border-2 border-slate-200 rounded-2xl p-4 text-center hover:border-brand-500 transition duration-200 bg-slate-50 hover:bg-brand-50/30">
+                                <input type="radio" name="age" value="6-7 лет" class="hidden" onchange="highlightSelection('age', this)">
+                                <div class="text-2xl mb-1">🚀</div>
+                                <div class="font-bold text-slate-800 text-sm">6–7 лет</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Подготовительная</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: MORAL EDUCATIONAL VALUE -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-500 text-white font-black text-sm flex items-center justify-center font-display">2</span>
+                            <h3 class="text-lg font-bold text-slate-800">Воспитательная ценность <span class="text-rose-500">*</span></h3>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5" id="value-selector-container">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: TOPIC SELECTION -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="w-8 h-8 rounded-full bg-brand-500 text-white font-black text-sm flex items-center justify-center font-display">3</span>
+                            <h3 class="text-lg font-bold text-slate-800">Тема занятия <span class="text-rose-500">*</span></h3>
+                        </div>
+                        <div class="space-y-3">
+                            <input type="text" id="topic-input" placeholder="Например: Помощь другу, Экология и сухие листья, Вежливые слова..." value="Помощь другу и забота" 
+                                class="w-full px-4 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-brand-500 focus:outline-none font-medium text-slate-800 placeholder-slate-400 text-sm transition">
+                            
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="text-xs font-semibold text-slate-500">Популярные темы:</span>
+                                <button type="button" onclick="setTopic('Помощь другу в беде')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">Помощь другу</button>
+                                <button type="button" onclick="setTopic('Забота о птицах зимой')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">Забота о птицах</button>
+                                <button type="button" onclick="setTopic('Моя семья и добрые традиции')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">Моя семья</button>
+                                <button type="button" onclick="setTopic('Честность и смелость')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">Честность</button>
+                                <button type="button" onclick="setTopic('Уважение к старшим')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">Уважение к старшим</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: MATERIAL TYPE -->
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-brand-500 text-white font-black text-sm flex items-center justify-center font-display">4</span>
+                                <h3 class="text-lg font-bold text-slate-800">Вид раздаточного материала <span class="text-rose-500">*</span></h3>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" id="material-types-container">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+
+                        <!-- Dynamic Options Panel (Shows depending on Material choice) -->
+                        <div id="dynamic-material-options" class="mt-4 p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 hidden">
+                            <!-- Populated dynamically via updateMaterialSubOptions() -->
+                        </div>
+                    </div>
+
+                    <!-- STEP 5: TARGET AI NETWORK -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-500 text-white font-black text-sm flex items-center justify-center font-display">5</span>
+                            <h3 class="text-lg font-bold text-slate-800">Для какой нейросети создать промт?</h3>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5" id="ai-models-container">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- STEP 6: ADDITIONAL CONDITIONS & MATERIALS AVAILABLE -->
+                    <div class="pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- What materials educator has -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">
+                                <i class="fa-solid fa-toolbox text-brand-500 mr-1"></i> Что есть у воспитателя?
+                            </label>
+                            <div class="grid grid-cols-2 gap-2 text-xs font-medium text-slate-700">
+                                <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl hover:bg-slate-100 cursor-pointer">
+                                    <input type="checkbox" name="materials_available" value="Черно-белый принтер" checked class="rounded text-brand-500">
+                                    <span>Ч/б принтер</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl hover:bg-slate-100 cursor-pointer">
+                                    <input type="checkbox" name="materials_available" value="Цветной принтер" class="rounded text-brand-500">
+                                    <span>Цветной принтер</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl hover:bg-slate-100 cursor-pointer">
+                                    <input type="checkbox" name="materials_available" value="Цветные карандаши" checked class="rounded text-brand-500">
+                                    <span>Карандаши</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-xl hover:bg-slate-100 cursor-pointer">
+                                    <input type="checkbox" name="materials_available" value="Ножницы и клей" class="rounded text-brand-500">
+                                    <span>Ножницы и клей</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Special conditions -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">
+                                <i class="fa-solid fa-user-gear text-warm-500 mr-1"></i> Особые условия занятия
+                            </label>
+                            <select id="special-conditions-select" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-brand-500">
+                                <option value="Стандартные условия">Стандартное занятие в подгруппе</option>
+                                <option value="Мало времени (до 10-15 минут)">Мало времени (экспресс-задание)</option>
+                                <option value="Большая группа (20+ детей)">Большая группа детей</option>
+                                <option value="Индивидуальная работа">Индивидуальная коррекционная работа</option>
+                                <option value="Инклюзивная группа (простые инструкции)">Инклюзивная группа (простые задания)</option>
+                                <option value="Работа в парах (сотрудничество)">Работа в парах</option>
+                                <option value="Занятие для дома с родителями">Совместно с родителями (дома)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- GENERATE BUTTON AREA -->
+                    <div class="pt-4 text-center">
+                        <button type="submit" class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-gradient-to-r from-brand-600 via-teal-600 to-warm-600 hover:from-brand-700 hover:to-warm-700 text-white font-black text-lg sm:text-xl shadow-xl shadow-brand-500/20 transform hover:-translate-y-0.5 active:translate-y-0 transition duration-200 flex items-center justify-center gap-3 mx-auto">
+                            <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
+                            <span>✨ СОЗДАТЬ ПРОФЕССИОНАЛЬНЫЙ ПРОМТ</span>
+                        </button>
+                        <p class="text-xs text-slate-400 mt-3">Автоматическая генерация экспертной инструкции, оптимизированной под возраст и выбранный ИИ</p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PROMPT RESULT SECTION (Shown after creation) -->
+            <div id="result-container" class="hidden scroll-mt-24 space-y-6">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-brand-500 relative overflow-hidden">
+                    
+                    <!-- Header Badges -->
+                    <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                        <div>
+                            <span class="px-3 py-1 bg-teal-100 text-teal-800 font-extrabold text-xs rounded-lg uppercase tracking-wide inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check"></i> Промт сформирован
+                            </span>
+                            <h2 id="result-material-title" class="text-2xl font-black text-slate-900 mt-1 font-display">
+                                Рабочий лист «Помощь другу»
+                            </h2>
+                            <p id="result-summary-subtitle" class="text-sm text-slate-500 mt-0.5">Возраст: 5–6 лет | Ценность: Дружба и сотрудничество</p>
+                        </div>
+
+                        <!-- Recommended AI Badge -->
+                        <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                            <div class="text-right">
+                                <div class="text-xs font-semibold text-slate-400 uppercase">Рекомендуемая нейросеть</div>
+                                <div id="result-ai-recommended" class="text-sm font-extrabold text-brand-600">ChatGPT / Claude</div>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Brief Description -->
+                    <div class="my-4 p-4 rounded-2xl bg-brand-50/50 border border-brand-100 text-sm text-slate-700">
+                        <span class="font-bold text-brand-700">📌 Описание материала:</span>
+                        <span id="result-brief-description">Сформирован готовый раздаточный материал с упражнениями на развитие ценности взаимопомощи и дружбы.</span>
+                    </div>
+
+                    <!-- PROMPT TEXTAREA DISPLAY -->
+                    <div class="relative mt-4">
+                        <div class="flex items-center justify-between bg-slate-800 text-slate-200 px-4 py-2.5 rounded-t-2xl text-xs font-mono">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-terminal text-emerald-400"></i> ГОТОВЫЙ ПРОФЕССИОНАЛЬНЫЙ ПРОМТ</span>
+                            <span id="prompt-char-count" class="text-slate-400">Символов: 0</span>
+                        </div>
+                        <textarea id="prompt-output-textarea" readonly rows="14" class="w-full p-4 bg-slate-900 text-slate-100 font-mono text-xs sm:text-sm rounded-b-2xl focus:outline-none custom-scrollbar leading-relaxed border-t-0 border-slate-800 select-all"></textarea>
+                    </div>
+
+                    <!-- NEGATIVE CONSTRAINTS BADGE -->
+                    <div class="mt-4 p-3.5 rounded-xl bg-rose-50 border border-rose-100 text-xs text-rose-800">
+                        <span class="font-bold"><i class="fa-solid fa-ban text-rose-500 mr-1"></i> Автоматические негативные ограничения:</span>
+                        <span id="result-negative-constraints" class="text-rose-700 ml-1">Без мелких деталей, без водяных знаков, без сложных инструкций.</span>
+                    </div>
+
+                    <!-- INSTRUCTION BOX -->
+                    <div class="mt-4 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs sm:text-sm text-amber-900 flex items-start gap-3">
+                        <i class="fa-solid fa-lightbulb text-amber-500 text-xl flex-shrink-0 mt-0.5"></i>
+                        <div>
+                            <span class="font-extrabold block mb-0.5">Инструкция по использованию:</span>
+                            1. Нажмите <strong>«Скопировать промт»</strong> ниже.<br>
+                            2. Нажмите <strong>«Открыть нейросеть»</strong>.<br>
+                            3. Вставьте скопированный промт в окно диалога ИИ и нажмите Enter.
+                        </div>
+                    </div>
+
+                    <!-- ACTION BUTTONS ROW -->
+                    <div class="mt-6 flex flex-wrap items-center gap-3">
+                        <!-- Copy Button -->
+                        <button onclick="copyCurrentPrompt()" class="flex-1 min-w-[200px] px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-copy"></i>
+                            <span id="copy-btn-text">📋 Скопировать промт</span>
+                        </button>
+
+                        <!-- Open AI Button -->
+                        <button onclick="openTargetAIService()" class="flex-1 min-w-[200px] px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-brand-600/20 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-up-right-from-square"></i>
+                            <span>🚀 Открыть нейросеть</span>
+                        </button>
+
+                        <!-- Save Favorite -->
+                        <button onclick="saveCurrentPromptToLibrary()" class="px-5 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-heart text-rose-500"></i>
+                            <span>Сохранить</span>
+                        </button>
+
+                        <!-- Improve Mode Dropdown / Button -->
+                        <div class="relative group">
+                            <button class="px-5 py-3.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-bold text-sm transition flex items-center gap-2">
+                                <i class="fa-solid fa-wand-magic"></i>
+                                <span>✨ Улучшить</span>
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </button>
+                            <div class="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-slate-100 hidden group-hover:block z-30 p-1">
+                                <button onclick="improvePromptLevel('basic')" class="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-purple-50 hover:text-purple-700">Базовый вариант</button>
+                                <button onclick="improvePromptLevel('detailed')" class="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-purple-50 hover:text-purple-700">Подробный вариант</button>
+                                <button onclick="improvePromptLevel('expert')" class="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-purple-50 hover:text-purple-700">Экспертный макет</button>
+                            </div>
+                        </div>
+
+                        <!-- Alternative mechanic -->
+                        <button onclick="generateAlternativeMechanic()" class="px-5 py-3.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold text-sm transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span>🔄 Другой вариант</span>
+                        </button>
+                    </div>
+
+                    <!-- DIRECT AI GENERATION TEST MODE (OPTIONAL INTEGRATION) -->
+                    <div class="mt-8 pt-6 border-t border-slate-100">
+                        <details class="group bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                            <summary class="cursor-pointer text-xs font-bold text-slate-600 flex items-center justify-between">
+                                <span><i class="fa-solid fa-bolt text-amber-500 mr-1.5"></i> Дополнительно: Опробовать прямую генерацию через Gemini API</span>
+                                <i class="fa-solid fa-chevron-down group-open:rotate-180 transition"></i>
+                            </summary>
+                            <div class="mt-4 space-y-3">
+                                <p class="text-xs text-slate-500">Если у вас есть доступ к Gemini API, вы можете сгенерировать ответ прямо в приложении без перехода на сторонние сайты.</p>
+                                <button onclick="runDirectGeminiCall()" id="btn-direct-gemini" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl flex items-center gap-2">
+                                    <i class="fa-solid fa-play"></i> Выполнить запрос в Gemini
+                                </button>
+                                <div id="direct-ai-output" class="hidden p-4 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-800 max-h-60 overflow-y-auto"></div>
+                            </div>
+                        </details>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: TEMPLATES SECTION -->
+        <!-- ========================================== -->
+        <div id="tab-templates" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900 font-display">Готовые шаблоны занятий</h2>
+                        <p class="text-slate-500 text-sm mt-0.5">Быстрый старт: выберите проверенную тему и адаптируйте под свою группу</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="templates-grid">
+                    <!-- Populated dynamically by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: MY PROMPTS SECTION -->
+        <!-- ========================================== -->
+        <div id="tab-my-prompts" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900 font-display">🤖 Мои сохраненные промты</h2>
+                        <p class="text-slate-500 text-sm mt-0.5">Ваша личная методическая копилка промтов</p>
+                    </div>
+                    <button onclick="clearAllSavedPrompts()" class="text-xs text-rose-600 hover:text-rose-800 font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-trash-can"></i> Очистить сохраненные
+                    </button>
+                </div>
+
+                <div id="saved-prompts-list" class="space-y-4">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: HISTORY SECTION -->
+        <!-- ========================================== -->
+        <div id="tab-history" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900 font-display">📜 История последних генераций</h2>
+                        <p class="text-slate-500 text-sm mt-0.5">Сохраняются последние 20 сгенерированных промтов</p>
+                    </div>
+                    <button onclick="clearHistory()" class="text-xs text-slate-500 hover:text-slate-700 font-bold">
+                        Очистить историю
+                    </button>
+                </div>
+
+                <div id="history-list" class="space-y-3">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500 text-xs sm:text-sm space-y-2">
+            <p class="font-bold text-slate-700">«ДОБРЫЕ ИГРЫ 2.0 — 1000 И 1 ИДЕЯ»</p>
+            <p>Проект создан в помощь воспитателям дошкольных образовательных организаций (ДОУ).</p>
+            <p class="text-slate-400">Идея → готовый промт → нейросеть → дидактический материал → печать</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           DATA MODELS & CONSTANTS
+           ========================================================================== */
+
+        // 1. Moral Values
+        const VALUES_LIST = [
+            { id: "Дружба и сотрудничество", icon: "🤝", desc: "Взаимопомощь, дружба, умение договариваться" },
+            { id: "Родина", icon: "🇷🇺", desc: "Любовь к родному краю, герб, флаг, традиции" },
+            { id: "Семья", icon: "👨‍👩‍👧", desc: "Уважение к родителям, старшим, традиции семьи" },
+            { id: "Природа", icon: "🌱", desc: "Забота о животных, растениях, экология" },
+            { id: "Человек", icon: "❤️", desc: "Уважение к личности, чувствам и эмоциям" },
+            { id: "Познание", icon: "💡", desc: "Любознательность, открытие нового, наука" },
+            { id: "Добро и милосердие", icon: "🕊️", desc: "Забота, сострадание, совершение добрых дел" },
+            { id: "Культура и красота", icon: "🎨", desc: "Эстетика, искусство, вежливость" },
+            { id: "Труд", icon: "🛠️", desc: "Уважение к профессиям, трудолюбие" },
+            { id: "Единство народов России", icon: "🌍", desc: "Дружба народов, обычаи, сказки" },
+            { id: "Жизнь и здоровье", icon: "🏃", desc: "ЗОЖ, гигиена, безопасность" }
+        ];
+
+        // 2. Material Types
+        const MATERIAL_TYPES = [
+            { id: "Рабочий лист", icon: "📄", desc: "A4, 3–7 заданий" },
+            { id: "Карточки", icon: "🃏", desc: "Пары, мемори, правила" },
+            { id: "Раскраска", icon: "🎨", desc: "Крупный ч/б контур" },
+            { id: "Дорисуй", icon: "✏️", desc: "Незавершенный рисунок" },
+            { id: "Найди и обведи", icon: "🔎", desc: "Внимание и счет" },
+            { id: "Соедини", icon: "🔗", desc: "Логические пары" },
+            { id: "Лабиринт", icon: "🧩", desc: "Маршрут к доброй цели" },
+            { id: "Ребус", icon: "❓", desc: "Загадка в картинках" },
+            { id: "Комикс", icon: "💬", desc: "История в 4–8 кадрах" },
+            { id: "Последовательность", icon: "🔢", desc: "Что сначала, что потом" },
+            { id: "Игровое поле", icon: "🎲", desc: "Настольная ходилка" },
+            { id: "Творческое задание", icon: "🎭", desc: "Аппликация / поделка" },
+            { id: "Семейное задание", icon: "👨‍👩‍👧", desc: "Работа с родителями" },
+            { id: "Комплект материалов", icon: "🎯", desc: "Полный сет (лист + карточки)" },
+            { id: "Идея занятия", icon: "💡", desc: "Сценарий и беседа" },
+            { id: "Изображение для печати", icon: "🖼", desc: "Иллюстрация / арт" },
+            { id: "Свой вариант", icon: "🤖", desc: "Гибкая настройка" }
+        ];
+
+        // 3. AI Models Options & External Redirect Services
+        const AI_MODELS = [
+            { id: "Universal", name: "Универсальный промт", icon: "fa-globe", color: "bg-slate-600", url: "https://chatgpt.com" },
+            { id: "ChatGPT", name: "ChatGPT (GPT-4o)", icon: "fa-bolt", color: "bg-emerald-600", url: "https://chatgpt.com" },
+            { id: "Claude", name: "Claude (Anthropic)", icon: "fa-brain", color: "bg-purple-600", url: "https://claude.ai" },
+            { id: "Gemini", name: "Google Gemini", icon: "fa-sparkles", color: "bg-blue-600", url: "https://gemini.google.com" },
+            { id: "Copilot", name: "MS Copilot", icon: "fa-microsoft", color: "bg-cyan-600", url: "https://copilot.microsoft.com" },
+            { id: "Perplexity", name: "Perplexity AI", icon: "fa-magnifying-glass", color: "bg-teal-600", url: "https://perplexity.ai" },
+            { id: "Ideogram", name: "Ideogram (Картинки)", icon: "fa-image", color: "bg-pink-600", url: "https://ideogram.ai" },
+            { id: "Leonardo", name: "Leonardo.Ai", icon: "fa-palette", color: "bg-amber-600", url: "https://leonardo.ai" },
+            { id: "Midjourney", name: "Midjourney", icon: "fa-compass", color: "bg-indigo-600", url: "https://midjourney.com" }
+        ];
+
+        // 4. Presets Templates
+        const READY_TEMPLATES = [
+            {
+                title: "Рабочий лист «Учимся помогать другу»",
+                age: "5-6 лет",
+                value: "Дружба и сотрудничество",
+                topic: "Помощь в трудной ситуации",
+                type: "Рабочий лист",
+                ai: "ChatGPT"
+            },
+            {
+                title: "Комплект карточек «Добрые и вежливые поступки»",
+                age: "4-5 лет",
+                value: "Добро и милосердие",
+                topic: "Правила вежливости и заботы",
+                type: "Карточки",
+                ai: "Universal"
+            },
+            {
+                title: "Раскраска-беседа «Забота о птичках зимой»",
+                age: "3-4 года",
+                value: "Природа",
+                topic: "Кормушка для синичек",
+                type: "Раскраска",
+                ai: "Ideogram"
+            },
+            {
+                title: "Добро-Комикс «Как делиться игрушками»",
+                age: "5-6 лет",
+                value: "Дружба и сотрудничество",
+                topic: "Решение конфликта в песочнице",
+                type: "Комикс",
+                ai: "Claude"
+            },
+            {
+                title: "Лабиринт «Путь доброго помощника»",
+                age: "4-5 лет",
+                value: "Труд",
+                topic: "Помощь маме в уборке",
+                type: "Лабиринт",
+                ai: "Gemini"
+            },
+            {
+                title: "Настольная игра-ходилка «Дорога Доброты»",
+                age: "6-7 лет",
+                value: "Единство народов России",
+                topic: "Путешествие по добрым делам",
+                type: "Игровое поле",
+                ai: "Universal"
+            }
+        ];
+
+        // Global State
+        let currentPromptState = null;
+        let savedPrompts = JSON.parse(localStorage.getItem('kindness_saved_prompts') || '[]');
+        let historyPrompts = JSON.parse(localStorage.getItem('kindness_history_prompts') || '[]');
+
+        /* ==========================================================================
+           STREAMING_CHUNK:Initializing state & rendering form controls...
+           UI INITIALIZATION FUNCTIONS
+           ========================================================================== */
+
+        window.onload = function() {
+            renderValuesSelector();
+            renderMaterialTypesSelector();
+            renderAIModelsSelector();
+            renderTemplates();
+            renderSavedPromptsList();
+            renderHistoryList();
+            updateSavedBadgeCount();
+            
+            // Set default selections
+            selectValue("Дружба и сотрудничество");
+            selectMaterial("Рабочий лист");
+            selectAIModel("ChatGPT");
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active', 'bg-brand-500', 'text-white');
+                el.classList.add('text-slate-600');
+            });
+
+            const selectedTab = document.getElementById(`tab-${tabId}`);
+            if (selectedTab) selectedTab.classList.remove('hidden');
+
+            const selectedNavBtn = document.getElementById(`nav-${tabId}`);
+            if (selectedNavBtn) {
+                selectedNavBtn.classList.add('active', 'bg-brand-500', 'text-white');
+                selectedNavBtn.classList.remove('text-slate-600');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Render Moral Values Grid
+        function renderValuesSelector() {
+            const container = document.getElementById('value-selector-container');
+            container.innerHTML = VALUES_LIST.map(v => `
+                <label class="value-card cursor-pointer border border-slate-200 rounded-xl p-3 hover:border-brand-500 transition bg-slate-50 hover:bg-brand-50/20 flex items-center gap-2.5">
+                    <input type="radio" name="value" value="${v.id}" class="hidden" onchange="highlightSelection('value', this)">
+                    <span class="text-xl">${v.icon}</span>
+                    <div class="overflow-hidden">
+                        <div class="font-bold text-slate-800 text-xs truncate">${v.id}</div>
+                        <div class="text-[10px] text-slate-400 truncate">${v.desc}</div>
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        // Render Material Types Grid
+        function renderMaterialTypesSelector() {
+            const container = document.getElementById('material-types-container');
+            container.innerHTML = MATERIAL_TYPES.map(m => `
+                <label class="material-card cursor-pointer border border-slate-200 rounded-xl p-3 hover:border-brand-500 transition bg-slate-50 hover:bg-brand-50/20 flex items-center gap-2.5">
+                    <input type="radio" name="material_type" value="${m.id}" class="hidden" onchange="highlightSelection('material_type', this); updateMaterialSubOptions('${m.id}');">
+                    <span class="text-2xl">${m.icon}</span>
+                    <div>
+                        <div class="font-bold text-slate-800 text-xs">${m.id}</div>
+                        <div class="text-[10px] text-slate-400">${m.desc}</div>
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        // Render AI Models Grid
+        function renderAIModelsSelector() {
+            const container = document.getElementById('ai-models-container');
+            container.innerHTML = AI_MODELS.map(a => `
+                <label class="ai-card cursor-pointer border border-slate-200 rounded-xl p-2.5 text-center hover:border-brand-500 transition bg-slate-50 hover:bg-brand-50/20">
+                    <input type="radio" name="ai_model" value="${a.id}" class="hidden" onchange="highlightSelection('ai_model', this)">
+                    <div class="w-7 h-7 rounded-lg ${a.color} text-white flex items-center justify-center mx-auto mb-1 text-xs">
+                        <i class="fa-solid ${a.icon}"></i>
+                    </div>
+                    <div class="font-bold text-slate-800 text-xs leading-tight">${a.name}</div>
+                </label>
+            `).join('');
+        }
+
+        function highlightSelection(name, inputEl) {
+            document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+                const label = inp.closest('label');
+                if (label) {
+                    label.classList.remove('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
+                    label.classList.add('border-slate-200', 'bg-slate-50');
+                }
+            });
+            const selectedLabel = inputEl.closest('label');
+            if (selectedLabel) {
+                selectedLabel.classList.remove('border-slate-200', 'bg-slate-50');
+                selectedLabel.classList.add('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
+            }
+        }
+
+        function selectValue(val) {
+            const input = document.querySelector(`input[name="value"][value="${val}"]`);
+            if (input) { input.checked = true; highlightSelection('value', input); }
+        }
+
+        function selectMaterial(mat) {
+            const input = document.querySelector(`input[name="material_type"][value="${mat}"]`);
+            if (input) { 
+                input.checked = true; 
+                highlightSelection('material_type', input); 
+                updateMaterialSubOptions(mat);
+            }
+        }
+
+        function selectAIModel(modelId) {
+            const input = document.querySelector(`input[name="ai_model"][value="${modelId}"]`);
+            if (input) { input.checked = true; highlightSelection('ai_model', input); }
+        }
+
+        function setTopic(text) {
+            document.getElementById('topic-input').value = text;
+        }
+
+        // Sub-options depending on selected material
+        function updateMaterialSubOptions(materialType) {
+            const container = document.getElementById('dynamic-material-options');
+            
+            if (materialType === 'Карточки') {
+                container.classList.remove('hidden');
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-amber-900 mb-1">Количество карточек:</label>
+                            <select id="sub-cards-count" class="w-full p-2 bg-white rounded-lg border border-amber-300 text-xs font-bold">
+                                <option value="4 карточки">4 карточки (A4)</option>
+                                <option value="6 карточек" selected>6 карточек (A4)</option>
+                                <option value="8 карточек">8 карточек</option>
+                                <option value="12 карточек">12 карточек (2 листа)</option>
+                                <option value="16 карточек">16 карточек</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-900 mb-1">Тип карточек:</label>
+                            <select id="sub-cards-type" class="w-full p-2 bg-white rounded-lg border border-amber-300 text-xs font-bold">
+                                <option value="Карточки-задания со сценарием" selected>Карточки-задания</option>
+                                <option value="Парные карточки (найди пару)">Парные карточки (найди пару)</option>
+                                <option value="Игра Мемори (память)">Мемори</option>
+                                <option value="Ситуация — Добрый поступок">Ситуация — Добрый поступок</option>
+                                <option value="Сортировка (хорошо / плохо)">Сортировка (хорошо / плохо)</option>
+                                <option value="Карточки эмоций и помощи">Карточки эмоций</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            } else if (materialType === 'Комикс') {
+                container.classList.remove('hidden');
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-amber-900 mb-1">Количество кадров:</label>
+                            <select id="sub-comic-frames" class="w-full p-2 bg-white rounded-lg border border-amber-300 text-xs font-bold">
+                                <option value="4 кадра (простая история)" selected>4 кадра (история)</option>
+                                <option value="6 кадров (развернутый сюжет)">6 кадров</option>
+                                <option value="8 кадров (2 страницы)">8 кадров</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-900 mb-1">Режим комиссии:</label>
+                            <select id="sub-comic-mode" class="w-full p-2 bg-white rounded-lg border border-amber-300 text-xs font-bold">
+                                <option value="Готовая история с диалогами" selected>Готовая история</option>
+                                <option value="Дорисуй и придумай реплики (шаблон)">Дорисуй/Заполни реплики</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+            }
+        }
+
+        /* ==========================================================================
+           STREAMING_CHUNK:Implementing professional PromptGenerator engine logic...
+           CORE PROMPT GENERATOR ENGINE
+           ========================================================================== */
+
+        class PromptGenerator {
+            
+            static generate(params) {
+                const { age, value, topic, materialType, aiModel, materialsAvailable, specialConditions, subOption1, subOption2, qualityLevel = 'detailed' } = params;
+
+                const isVisualAI = ['Ideogram', 'Leonardo', 'Midjourney'].includes(aiModel);
+
+                let promptText = '';
+
+                if (isVisualAI) {
+                    promptText = this.buildVisualArtPrompt(params);
+                } else {
+                    promptText = this.buildTextualMaterialPrompt(params, qualityLevel);
+                }
+
+                // Automatic Quality Control Verification
+                promptText = this.qualityControlEnrichment(promptText, params);
+
+                return {
+                    title: `${materialType} «${topic}»`,
+                    summary: `Возраст: ${age} | Ценность: ${value} | Нейросеть: ${aiModel}`,
+                    prompt: promptText,
+                    negativeConstraints: this.getNegativeConstraints(materialType, isVisualAI),
+                    recommendedAI: this.getRecommendedAIName(aiModel, materialType)
+                };
+            }
+
+            static getRecommendedAIName(aiModel, materialType) {
+                if (aiModel !== 'Universal') return aiModel;
+                if (['Раскраска', 'Изображение для печати', 'Дорисуй'].includes(materialType)) {
+                    return 'Ideogram / Midjourney / ChatGPT (DALL-E 3)';
+                }
+                return 'ChatGPT (GPT-4o) / Claude 3.5 Sonnet / Gemini';
+            }
+
+            static getNegativeConstraints(materialType, isVisual) {
+                let base = "Не используй сложные взрослые формулировки. Не перегружай страницу. Не используй мелкий шрифт. Избегай агрессивных и негативных сюжетов. Все элементы должны быть безопасны и добры.";
+                if (isVisual || ['Раскраска', 'Дорисуй', 'Карточки'].includes(materialType)) {
+                    base += " Без водяных знаков, без обрезанных персонажей, без сложного пестрого фона, без размытых контуров, без лишнего непонятного текста.";
+                }
+                return base;
+            }
+
+            static qualityControlEnrichment(prompt, params) {
+                // Pre-flight check: Ensure all critical specs are explicitly present
+                let enriched = prompt;
+                if (!enriched.includes(params.age)) enriched += `\n- Целевой возраст: ${params.age}`;
+                if (!enriched.includes(params.value)) enriched += `\n- Воспитательный акцент: ${params.value}`;
+                return enriched;
+            }
+
+            static buildTextualMaterialPrompt(params, qualityLevel) {
+                const { age, value, topic, materialType, aiModel, materialsAvailable, specialConditions } = params;
+
+                const taskCount = this.getTaskCountByAge(age);
+
+                return `РОЛЬ ИИ:
+Ты — ведущий методист дошкольного образования и разработчик готовых дидактических материалов высшей категории.
+
+ЗАДАЧА:
+Сформируй полностью готовый к печати и проведению материал: "${materialType}" на тему "${topic}".
+Материал должен быть сразу готов к распечатке на принтере и работе с детьми без необходимости ручной доработки.
+
+ЦЕЛЕВАЯ АУДИТОРИЯ И ВОЗРАСТНЫЕ ОСОБЕННОСТИ:
+- Возрастная группа: ${age}.
+- Особенности восприятия: ${this.getAgeDescription(age)}.
+
+ВОСПИТАТЕЛЬНАЯ ЦЕННОСТЬ:
+- Ключевая ценность: "${value}".
+- Как она раскрывается: Задания и сюжет должны показывать практические примеры (${this.getValueExamples(value)}).
+
+ФОРМАТ И ТЕХНИЧЕСКИЕ ТРЕБОВАНИЯ:
+- Формат страницы: А4, вертикальная ориентация.
+- Ограничение по материалам: ${materialsAvailable.join(', ')}.
+- Особые условия проведения: ${specialConditions}.
+
+СТРУКТУРА И СОДЕРЖАНИЕ МАТЕРИАЛА:
+1. Заголовок материала (крупный, понятный ребенку и воспитателю).
+2. Шапка: Поле для имени ребенка и даты (символом или строчкой).
+3. Вводная добрая микро-история / обращение персонажа-помощника (2–3 предложения).
+4. Блок практических заданий (${taskCount} заданий):
+${this.generateTasksStructure(materialType, age, taskCount)}
+
+ТРЕБОВАНИЯ К ТЕКСТУ И ОФОРМЛЕНИЮ:
+- Формулировки инструкций для ребенка должны быть предельно краткими и понятными.
+- Используй визуальные разделители между заданиями.
+- Добавь методический комментарий для воспитателя: цель занятия, что спросить у ребенка после выполнения.
+
+НЕГАТИВНЫЕ ОГРАНИЧЕНИЯ (ЧТО НЕ ДЕЛАТЬ):
+${this.getNegativeConstraints(materialType, false)}
+
+ОЖИДАЕМЫЙ РЕЗУЛЬТАТ ОТ ИИ:
+Выдай структурированный, полностью готовый текст макета (при необходимости с SVG/HTML разметкой таблиц или карточек), который воспитатель скопирует и распечатает.`;
+            }
+
+            static buildVisualArtPrompt(params) {
+                const { age, value, topic, materialType, subOption1 } = params;
+
+                let styleSpec = "clean vector illustration style, coloring book art, bold black outlines, smooth clear line art, high resolution, print ready A4 aspect ratio 3:4";
+                if (materialType === 'Раскраска') {
+                    styleSpec = "black and white outline coloring page for young kids, pure white background, thick black contour lines, zero shading, no color fill, simple large shapes, cute friendly character, vector style";
+                } else if (materialType === 'Карточки') {
+                    styleSpec = `grid layout set of ${subOption1 || '6'} flashcards, clean white background, isometric cute vector graphics, flat design, colorful friendly style`;
+                }
+
+                return `Prompt for AI Image Generator (${params.aiModel}):
+
+Subject: Children's educational visual material on topic "${topic}" emphasizing the value of "${value}" for kindergarten kids aged ${age}.
+Style: ${styleSpec}.
+Details: Friendly cute characters demonstrating good deeds, helping friends, sharing toys, smiling faces, highly age-appropriate for ${age} years old.
+Composition: Centered, clean layout, spacious composition, bright distinct figures, perfect for printing on paper.
+Negative prompt: watermark, text, blurred lines, grayscale shading, realistic horror, dark themes, ugly faces, cropped limbs, cluttered background, messy details.`;
+            }
+
+            static getTaskCountByAge(age) {
+                if (age.includes("3-4")) return "2–3 простых задания";
+                if (age.includes("4-5")) return "3–4 задания";
+                if (age.includes("5-6")) return "4–5 заданий";
+                return "5–6 разноплановых заданий";
+            }
+
+            static getAgeDescription(age) {
+                if (age.includes("3-4")) return "крупные элементы, одно действие за раз, наглядность, простые понятные сюжеты.";
+                if (age.includes("4-5")) return "короткие инструкции, выбор из 2-3 вариантов, сравнение, простые классификации.";
+                if (age.includes("5-6")) return "причинно-следственные связи, логические ряды, самостоятельные выводы, речевые задания.";
+                return "развитые логика и речь, задания на рассуждение, объяснение своего выбора, подготовка к школе.";
+            }
+
+            static getValueExamples(value) {
+                switch(value) {
+                    case "Дружба и сотрудничество": return "помощь другу, совместная игра, умение делиться и мириться";
+                    case "Родина": return "любовь к родному дому, бережное отношение к природе края, символы страны";
+                    case "Семья": return "забота о маме и бабушке, помощь по дому, семейные добрые традиции";
+                    case "Природа": return "покормить птиц, не ломать ветки, убрать мусор, забота о животных";
+                    case "Труд": return "уважение к труду дворника/повара/врача, убрать за собой игрушки";
+                    default: return "доброта, внимание к окружающим, совершение позитивных поступков";
+                }
+            }
+
+            static generateTasksStructure(materialType, age, taskCount) {
+                switch(materialType) {
+                    case "Рабочий лист":
+                        return `   - Задание 1 (На внимание/Поиск): "Найди и обведи поступки, где герои помогают друг другу."
+   - Задание 2 (Соедини парами/Логика): "Соедини стрелочкой героя и то, как он может помочь другу."
+   - Задание 3 (Творческое/Дорисуй): "Дорисуй улыбку персонажу, которому оказали помощь."
+   - Задание 4 (Речевое/Беседа): "Расскажи по картинке: какой добрый поступок ты совершил сегодня?"`;
+                    
+                    case "Карточки":
+                        return `   - Формат каждой карточки: Заголовок + Описание ситуации + Ситуативный вопрос к ребенку + Визуальный набросок для иллюстрации.
+   - Сформируй 6 разных жизненных ситуаций, иллюстрирующих тему.`;
+
+                    case "Комикс":
+                        return `   - Кадр 1: Завязка (Возникновение проблемы / герою нужна помощь).
+   - Кадр 2: Развитие (Персонаж думает, как поступить правильно).
+   - Кадр 3: Доброе действие (Герой оказывает помощь и проявляет заботу).
+   - Кадр 4: Счастливый финал (Радость, дружба и благодарность).`;
+
+                    case "Лабиринт":
+                        return `   - Описание старта (Герой спешит на помощь).
+   - Описание правильного маршрута через добрые поступки.
+   - Описание тупиков с предупреждениями (эгоистичные поступки ведущие в тупик).`;
+
+                    default:
+                        return `   - Задания 1-${taskCount}: Игровые механики (сортировка, поиск, выбор правильного решения, речевое объяснение).`;
+                }
+            }
+        }
+
+        /* ==========================================================================
+           STREAMING_CHUNK:Handling form submission, UI rendering & copy actions...
+           FORM & INTERACTION HANDLERS
+           ========================================================================== */
+
+        function handleGeneratePrompt() {
+            // Validate Required Inputs
+            const ageEl = document.querySelector('input[name="age"]:checked');
+            const valueEl = document.querySelector('input[name="value"]:checked');
+            const topicEl = document.getElementById('topic-input').value.trim();
+            const materialEl = document.querySelector('input[name="material_type"]:checked');
+            const aiEl = document.querySelector('input[name="ai_model"]:checked');
+
+            const alertBanner = document.getElementById('alert-banner');
+            const alertMsg = document.getElementById('alert-message');
+
+            if (!ageEl || !valueEl || !topicEl || !materialEl) {
+                alertMsg.textContent = "Пожалуйста, выберите возраст, ценность, тему и тип материала!";
+                alertBanner.classList.remove('hidden');
+                alertBanner.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            alertBanner.classList.add('hidden');
+
+            // Gather values
+            const materialsAvailable = Array.from(document.querySelectorAll('input[name="materials_available"]:checked')).map(el => el.value);
+            const specialConditions = document.getElementById('special-conditions-select').value;
+            const subOption1 = document.getElementById('sub-cards-count')?.value || document.getElementById('sub-comic-frames')?.value || '';
+            const subOption2 = document.getElementById('sub-cards-type')?.value || document.getElementById('sub-comic-mode')?.value || '';
+
+            const params = {
+                age: ageEl.value,
+                value: valueEl.value,
+                topic: topicEl,
+                materialType: materialEl.value,
+                aiModel: aiEl ? aiEl.value : 'Universal',
+                materialsAvailable,
+                specialConditions,
+                subOption1,
+                subOption2
+            };
+
+            // Generate Prompt
+            const result = PromptGenerator.generate(params);
+            currentPromptState = { ...params, ...result, createdAt: new Date().toISOString() };
+
+            // Render Output
+            renderPromptResult(currentPromptState);
+
+            // Add to history
+            addToHistory(currentPromptState);
+        }
+
+        function renderPromptResult(data) {
+            const container = document.getElementById('result-container');
+            container.classList.remove('hidden');
+
+            document.getElementById('result-material-title').textContent = data.title;
+            document.getElementById('result-summary-subtitle').textContent = `Возраст: ${data.age} | Ценность: ${data.value}`;
+            document.getElementById('result-ai-recommended').textContent = data.recommendedAI;
+            document.getElementById('result-brief-description').textContent = `Сформирован экспертный промт для нейросети под возраст ${data.age}. Тема: "${data.topic}".`;
+            
+            const textarea = document.getElementById('prompt-output-textarea');
+            textarea.value = data.prompt;
+            document.getElementById('prompt-char-count').textContent = `Символов: ${data.prompt.length}`;
+            document.getElementById('result-negative-constraints').textContent = data.negativeConstraints;
+
+            // Scroll smoothly to output
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Copy Prompt Functionality with fallback
+        function copyCurrentPrompt() {
+            const textarea = document.getElementById('prompt-output-textarea');
+            if (!textarea || !textarea.value) return;
+
+            textarea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopyFeedback();
+                } else {
+                    navigator.clipboard.writeText(textarea.value).then(showCopyFeedback);
+                }
+            } catch (err) {
+                navigator.clipboard.writeText(textarea.value).then(showCopyFeedback);
+            }
+        }
+
+        function showCopyFeedback() {
+            const btnText = document.getElementById('copy-btn-text');
+            const original = btnText.innerHTML;
+            btnText.innerHTML = '✅ Скопировано в буфер!';
+            setTimeout(() => {
+                btnText.innerHTML = original;
+            }, 2000);
+        }
+
+        // Open AI Service in New Tab
+        function openTargetAIService() {
+            if (!currentPromptState) return;
+            const modelObj = AI_MODELS.find(a => a.id === currentPromptState.aiModel) || AI_MODELS[0];
+            window.open(modelObj.url, '_blank');
+        }
+
+        // Improve Prompt Logic
+        function improvePromptLevel(level) {
+            if (!currentPromptState) return;
+            const updatedParams = { ...currentPromptState, qualityLevel: level };
+            const result = PromptGenerator.generate(updatedParams);
+            currentPromptState = { ...updatedParams, ...result };
+            renderPromptResult(currentPromptState);
+        }
+
+        // Generate Alternative Mechanics
+        function generateAlternativeMechanic() {
+            if (!currentPromptState) return;
+            const mechanics = ["Игровое поле", "Лабиринт", "Карточки", "Комикс", "Последовательность", "Ребус", "Дорисуй"];
+            const currentMat = currentPromptState.materialType;
+            const nextMat = mechanics.filter(m => m !== currentMat)[Math.floor(Math.random() * (mechanics.length - 1))];
+            
+            selectMaterial(nextMat);
+            handleGeneratePrompt();
+        }
+
+        /* ==========================================================================
+           STREAMING_CHUNK:Implementing local persistence (History, Saved Prompts, Templates)...
+           STORAGE & HISTORY MANAGEMENT
+           ========================================================================== */
+
+        function saveCurrentPromptToLibrary() {
+            if (!currentPromptState) return;
+            const exists = savedPrompts.some(p => p.prompt === currentPromptState.prompt);
+            if (!exists) {
+                savedPrompts.unshift(currentPromptState);
+                localStorage.setItem('kindness_saved_prompts', JSON.stringify(savedPrompts));
+                renderSavedPromptsList();
+                updateSavedBadgeCount();
+                alert('Промт успешно сохранен в "Мои промты"!');
+            } else {
+                alert('Этот промт уже сохранен!');
+            }
+        }
+
+        function updateSavedBadgeCount() {
+            const badge = document.getElementById('saved-prompts-count');
+            if (savedPrompts.length > 0) {
+                badge.textContent = savedPrompts.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function addToHistory(item) {
+            historyPrompts.unshift(item);
+            if (historyPrompts.length > 20) historyPrompts.pop();
+            localStorage.setItem('kindness_history_prompts', JSON.stringify(historyPrompts));
+            renderHistoryList();
+        }
+
+        function clearHistory() {
+            historyPrompts = [];
+            localStorage.removeItem('kindness_history_prompts');
+            renderHistoryList();
+        }
+
+        function clearAllSavedPrompts() {
+            if (confirm('Вы уверены, что хотите удалить все сохраненные промты?')) {
+                savedPrompts = [];
+                localStorage.removeItem('kindness_saved_prompts');
+                renderSavedPromptsList();
+                updateSavedBadgeCount();
+            }
+        }
+
+        function renderSavedPromptsList() {
+            const container = document.getElementById('saved-prompts-list');
+            if (savedPrompts.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">У вас пока нет сохраненных промтов. Нажмите "Сохранить" после генерации.</div>`;
+                return;
+            }
+
+            container.innerHTML = savedPrompts.map((item, idx) => `
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-brand-300 transition space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h4 class="font-bold text-slate-900 text-base">${item.title}</h4>
+                        <span class="text-xs px-2.5 py-1 bg-brand-100 text-brand-700 font-bold rounded-lg">${item.aiModel}</span>
+                    </div>
+                    <p class="text-xs text-slate-500">${item.summary}</p>
+                    <div class="bg-slate-900 text-slate-200 p-3 rounded-xl text-xs font-mono max-h-24 overflow-y-auto custom-scrollbar select-all">
+                        ${item.prompt}
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 pt-2">
+                        <button onclick="copySavedPrompt(${idx})" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-copy"></i> Копировать
+                        </button>
+                        <button onclick="restoreSavedPrompt(${idx})" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-rotate-right"></i> Открыть в генераторе
+                        </button>
+                        <button onclick="deleteSavedPrompt(${idx})" class="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-bold transition ml-auto">
+                            Удалить
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHistoryList() {
+            const container = document.getElementById('history-list');
+            if (historyPrompts.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">История пуста. Попробуйте сгенерировать первый промт!</div>`;
+                return;
+            }
+
+            container.innerHTML = historyPrompts.map((item, idx) => `
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div>
+                        <div class="font-bold text-slate-800 text-sm">${item.title}</div>
+                        <div class="text-slate-500">${item.summary} | ${new Date(item.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    </div>
+                    <button onclick="restoreHistoryPrompt(${idx})" class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold rounded-lg transition flex items-center gap-1">
+                        <i class="fa-solid fa-repeat"></i> Повторить
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function copySavedPrompt(idx) {
+            const item = savedPrompts[idx];
+            if (item) {
+                navigator.clipboard.writeText(item.prompt);
+                alert('Промт скопирован!');
+            }
+        }
+
+        function deleteSavedPrompt(idx) {
+            savedPrompts.splice(idx, 1);
+            localStorage.setItem('kindness_saved_prompts', JSON.stringify(savedPrompts));
+            renderSavedPromptsList();
+            updateSavedBadgeCount();
+        }
+
+        function restoreSavedPrompt(idx) {
+            const item = savedPrompts[idx];
+            if (item) applyStateToFormAndRun(item);
+        }
+
+        function restoreHistoryPrompt(idx) {
+            const item = historyPrompts[idx];
+            if (item) applyStateToFormAndRun(item);
+        }
+
+        function applyStateToFormAndRun(item) {
+            switchTab('generator');
+            
+            // Set age
+            const ageInput = document.querySelector(`input[name="age"][value="${item.age}"]`);
+            if (ageInput) { ageInput.checked = true; highlightSelection('age', ageInput); }
+
+            // Set value
+            selectValue(item.value);
+
+            // Set topic
+            document.getElementById('topic-input').value = item.topic;
+
+            // Set material
+            selectMaterial(item.materialType);
+
+            // Set AI
+            selectAIModel(item.aiModel);
+
+            // Trigger generation
+            handleGeneratePrompt();
+        }
+
+        // Render Templates Grid
+        function renderTemplates() {
+            const container = document.getElementById('templates-grid');
+            container.innerHTML = READY_TEMPLATES.map((t, idx) => `
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-brand-400 transition flex flex-col justify-between space-y-4">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-brand-100 text-brand-700 inline-block mb-2">${t.type}</span>
+                        <h4 class="font-bold text-slate-900 text-base leading-snug">${t.title}</h4>
+                        <div class="text-xs text-slate-500 mt-2 space-y-1">
+                            <div><strong>Возраст:</strong> ${t.age}</div>
+                            <div><strong>Ценность:</strong> ${t.value}</div>
+                            <div><strong>Тема:</strong> ${t.topic}</div>
+                        </div>
+                    </div>
+                    <button onclick="useTemplate(${idx})" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Использовать шаблон
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function useTemplate(idx) {
+            const t = READY_TEMPLATES[idx];
+            if (t) {
+                applyStateToFormAndRun({
+                    age: t.age,
+                    value: t.value,
+                    topic: t.topic,
+                    materialType: t.type,
+                    aiModel: t.ai
+                });
+            }
+        }
+
+        /* ==========================================================================
+           DIRECT GEMINI API INTEGRATION CALL (OPTIONAL FEATURE)
+           ========================================================================== */
+
+        async function runDirectGeminiCall() {
+            const textarea = document.getElementById('prompt-output-textarea');
+            const outputDiv = document.getElementById('direct-ai-output');
+            const btn = document.getElementById('btn-direct-gemini');
+
+            if (!textarea || !textarea.value) return;
+
+            outputDiv.classList.remove('hidden');
+            outputDiv.innerHTML = '<span class="text-amber-600"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Обращение к Gemini AI... Формирование дидактического материала...</span>';
+            btn.disabled = true;
+
+            try {
+                const apiKey = ""; // Built-in canvas runtime key
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: textarea.value }] }],
+                        systemInstruction: { parts: [{ text: "Ты — эксперт по дошкольному образованию. Выдай развернутый готов материал." }] }
+                    })
+                });
+
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    outputDiv.innerHTML = `<div class="whitespace-pre-wrap">${text}</div>`;
+                } else {
+                    outputDiv.innerHTML = '<span class="text-rose-600">Не удалось получить ответ. Используйте кнопку "Скопировать промт" и перейдите на сайт нейросети.</span>';
+                }
+            } catch (e) {
+                outputDiv.innerHTML = `<span class="text-rose-600">Ошибка взаимодействия с API: ${e.message}. Скопируйте промт вручную.</span>`;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
